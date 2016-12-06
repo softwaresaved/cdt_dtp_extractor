@@ -99,6 +99,8 @@ projects.keys.each do |project_reference|
   else
     projects[project_reference]["lead_org"] = project_details_json["projectOverview"]["projectComposition"]["leadResearchOrganisation"]["name"]
     projects[project_reference]["lead_org_dept"] = project_details_json["projectOverview"]["projectComposition"]["leadResearchOrganisation"]["department"]
+    full_address = project_details_json["projectOverview"]["projectComposition"]["leadResearchOrganisation"]["address"]
+    projects[project_reference]["lead_org_address"] = full_address.map{|k,v| "#{v}" }.join(', ')
     projects[project_reference]["lead_org_postcode"] = project_details_json["projectOverview"]["projectComposition"]["leadResearchOrganisation"]["address"]["postCode"]
     projects[project_reference]["lead_org_region"] = project_details_json["projectOverview"]["projectComposition"]["leadResearchOrganisation"]["address"]["region"]
     projects[project_reference]["funder"] = project_details_json["projectOverview"]["projectComposition"]["project"]["fund"]["funder"]["name"]
@@ -131,11 +133,13 @@ FileUtils.touch(csv_file_path) unless File.exist?(csv_file_path)
 csv_headers = ["title",
                "funder",
                "project_reference",
+               "grant_category",
                "start",
                "end",
                "award_in_pounds",
                "lead_org",
                "lead_org_dept",
+               "lead_org_address",
                "lead_org_postcode",
                "lead_org_region",
                "grant_holder_firstname",
@@ -152,11 +156,13 @@ begin
       csv << [project_details["title"],
               project_details["funder"],
               project_reference,
+              project_details["grant_category"],
               project_details["start"],
               project_details["end"],
               project_details["award_in_pounds"],
               project_details["lead_org"],
               project_details["lead_org_dept"],
+              project_details["lead_org_address"],
               project_details["lead_org_postcode"],
               project_details["lead_org_region"],
               project_details["grant_holder_firstname"],
