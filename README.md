@@ -10,5 +10,5 @@ See http://gtr.rcuk.ac.uk/resources/GtR-2-API-v1.6.pdf for RCUK GtR API 2 detail
 
 To run the Ruby script to extract the CDT/DTP project data, from project root do:
 ```
-ruby rcuk_gtr_api_cdt_dtp_extractor.rb
+# ruby rcuk_gtr_api_cdt_dtp_extractor.rb
 ```
