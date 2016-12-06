@@ -18,7 +18,7 @@ def get_project_details(projects)
     project_reference = project["identifiers"]["identifier"].detect {|h| h["type"] == "RCUK"}["value"]
     project_details[project_reference] = {"title" => project["title"],
                                           "rcuk_id" => project["id"],
-                                          "grant_category" => project["grantCategory"]} unless (project_reference.nil? or project["grantCategory"] == 'Studentship' or project["status"] == 'Closed')
+                                          "grant_category" => project["grantCategory"]} if (!project_reference.nil? and project["grantCategory"] == 'Training Grant' and project["status"] != 'Closed')
   end
   project_details
 end
