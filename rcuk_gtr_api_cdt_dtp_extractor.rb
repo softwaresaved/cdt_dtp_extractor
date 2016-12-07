@@ -9,9 +9,9 @@ require 'json'
 require 'csv'
 require 'fileutils'
 
-# Returns a hash of project references pointing to the project details obtained from search results in JSON format
+# Returns a hash of project/grant references pointing to the hash of project details extracted from the search results
 # (for other project details we need to further query the RCUK APIs).
-# Also prune out all projects that are closed/expired/not active and those that have the grant type set to "Studentship" as they are not CDTs/DTPs.
+# Also prune out all projects that are closed/expired/not active and those that do not have the grant type set to "Training Grant" as they are not CDTs/DTPs.
 def get_project_details(projects)
   project_details = {}
   projects.each do |project|
@@ -38,7 +38,7 @@ search_terms = ['cdt', 'dtc', 'dtp', '"doctoral training centre"', '"centre for 
 api2_search_url = api2_base_url + "?s=#{results_per_page}&q=" + search_terms.map { |term| URI::encode(term) }.join('+')
 
 # Get the paged search results back (returns only the first page along with the number of total
-# pages and and the total number of results to be retrieved via successive calls)
+# pages and the total number of results to be retrieved via successive calls)
 puts "\n" + "#" * 80 +"\n\n"
 puts "Getting search results for CDTs/DTPs from #{api2_search_url}"
 search_results = []
@@ -124,7 +124,7 @@ projects.keys.each do |project_reference|
   end
 end
 
-# Export the CDT/DTP project results into a CSV spreadsheet saved in the data folder.
+# Export the CDT/DTP project results into a CSV spreadsheet.
 date = Time.now.strftime("%Y-%m-%d")
 csv_file_path = "CDT_DTP_projects_#{date}.csv"
 FileUtils.touch(csv_file_path) unless File.exist?(csv_file_path)
@@ -133,7 +133,7 @@ FileUtils.touch(csv_file_path) unless File.exist?(csv_file_path)
 csv_headers = ["title",
                "funder",
                "project_reference",
-               "grant_category",
+               # "grant_category",    # do not need it as all grants are of type "Training Grant"
                "start",
                "end",
                "award_in_pounds",
@@ -156,7 +156,7 @@ begin
       csv << [project_details["title"],
               project_details["funder"],
               project_reference,
-              project_details["grant_category"],
+              # project_details["grant_category"],
               project_details["start"],
               project_details["end"],
               project_details["award_in_pounds"],
